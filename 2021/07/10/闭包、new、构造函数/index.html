@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+  <head>
+     
+    <meta charset="UTF-8">
+    <title>闭包、new、构造函数 - Cadben</title>
+    <link rel="shortcut icon" href="/static/img/icon.png">
+    <link rel="icon" href="/static/img/icon.png" sizes="192x192"/>
+    
+<link rel="stylesheet" href="/static/kico.css">
+<link rel="stylesheet" href="/static/hingle.css">
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/FortAwesome/Font-Awesome/css/font-awesome.min.css">
+
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1"/>
+    <meta property="og:site_name" content="Cadben">
+    <meta property="og:title" content="闭包、new、构造函数"/>
+    
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+  <body>
+    <header>
+    <div class="head-title">
+        <h4>Cadben</h4>
+    </div>
+    <div class="head-action">
+        <div class="toggle-btn"></div>
+        <div class="light-btn"></div>
+        <div class="search-btn"></div>
+    </div>
+    <form class="head-search" method="post">
+        <input type="text" name="s" placeholder="搜索什么？">
+    </form>
+    <nav class="head-menu">
+        <a href="/">首页</a>
+        <div class="has-child">
+            <a>分类</a>
+            <div class="sub-menu">
+                <a class="category-link" href="/categories/%E5%88%B7%E9%A2%98/">刷题</a><a class="category-link" href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a>
+            </div>
+        </div>
+        
+            <a href="/about">关于我</a>
+        
+    </nav>
+</header>
+
+    <main>
+    <div class="wrap min">
+        <section class="post-title">
+            <h2>闭包、new、构造函数</h2>
+            <div class="post-meta">
+                <time class="date">2021.07.10</time>
+            
+                <span class="category"><a class="category-link" href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a></span>
+            
+            </div>
+        </section>
+        <article class="post-content">
+        
+            <blockquote>这篇文章上次修改于 255 天前，可能其部分内容已经发生变化，如有疑问可询问作者。</blockquote>
+        
+            <h1 id="闭包、new、构造函数"><a href="#闭包、new、构造函数" class="headerlink" title="闭包、new、构造函数"></a>闭包、new、构造函数</h1><h2 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h2><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// function a() &#123;</span></span><br><span class="line"><span class="comment">//     var s = 123;</span></span><br><span class="line"><span class="comment">//     function b() &#123;</span></span><br><span class="line"><span class="comment">//         return s;</span></span><br><span class="line"><span class="comment">//     &#125;</span></span><br><span class="line"><span class="comment">//     return b;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"><span class="comment">// console.log(a()());</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">increa</span>(<span class="params">params</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> params ++;</span><br><span class="line">    &#125;&#125;</span><br><span class="line"><span class="keyword">var</span> inc = <span class="title function_">increa</span>(<span class="number">1</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">inc</span>());</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">inc</span>());<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">inc</span>());<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">inc</span>());<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">inc</span>());</span><br></pre></td></tr></table></figure>
+
+<h2 id="new-做了什么"><a href="#new-做了什么" class="headerlink" title="new 做了什么"></a>new 做了什么</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function _new() &#123;    // 先获取参数    const args = [].slice.call(arguments);    const constructor = args.shift();    // 创建一个新对象，并且把这个对象的原型指向构造函数的prototype属性    const obj = new Object(constructor.prototype);    // 将这个对象的this指向函数的this    const result = constructor.apply(obj, args);    return result;&#125;let ar = _new(Array, &#x27;123&#x27;,&#x27;223&#x27;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="this"><a href="#this" class="headerlink" title="this"></a>this</h2><p>谁调用，指向谁</p>
+<h3 id="使用场合"><a href="#使用场合" class="headerlink" title="使用场合"></a>使用场合</h3><ul>
+<li><p>全局环境 指向windows</p>
+</li>
+<li><p>构造函数中，指向实例对象</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var Obj = function (p) &#123;  this.p = p;&#125;;var o = new Obj(&#x27;Hello World!&#x27;);o.p</span><br></pre></td></tr></table></figure></li>
+<li><p>对象方法，指向运行时的所在的对象</p>
+</li>
+</ul>
+<h2 id="call、apply、bind"><a href="#call、apply、bind" class="headerlink" title="call、apply、bind"></a>call、apply、bind</h2><ul>
+<li><p>巧用apply</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var a = [10, 2, 4, 15, 9];</span><br><span class="line">Math.max.apply(null, a) // 15</span><br><span class="line">找出最大数</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><h3 id="1-构造函数继承"><a href="#1-构造函数继承" class="headerlink" title="1.构造函数继承"></a>1.构造函数继承</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function person(params) &#123;    this.name = params;    this.getName = function() &#123;        console.log(this.name);    &#125;&#125;function man(name) &#123;    person.call(this, name);    this.sex = &#x27;男&#x27;;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>没办法共享属性，例如对象中有一个方法，造成资源浪费</p>
+<h3 id="2-原型链继承"><a href="#2-原型链继承" class="headerlink" title="2.原型链继承"></a>2.原型链继承</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function SuperType()&#123;  this.colors = [&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;];&#125;function SubType()&#123;&#125;SubType.prototype = new SuperType();</span><br></pre></td></tr></table></figure>
+
+<p>原型链方案存在的缺点：多个实例对引用类型的操作会被篡改。</p>
+<h3 id="3-组合继承"><a href="#3-组合继承" class="headerlink" title="3.组合继承"></a>3.组合继承</h3><p>组合模式的缺点就是在使用子类创建实例对象时，其原型中会存在两份相同的属性/方法。</p>
+<h3 id="4-原型式继承"><a href="#4-原型式继承" class="headerlink" title="4.原型式继承"></a>4.原型式继承</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// 第一种Object.create();// 第二种function object(obj)&#123;  function F()&#123;&#125;  F.prototype = obj;  return new F();&#125;</span><br></pre></td></tr></table></figure>
+
+<p>缺点：</p>
+<ul>
+<li>原型链继承多个实例的引用类型属性指向相同，存在篡改的可能。</li>
+<li>无法传递参数</li>
+</ul>
+<h3 id="5-寄生组合式继承"><a href="#5-寄生组合式继承" class="headerlink" title="5.寄生组合式继承"></a>5.寄生组合式继承</h3><p>这是最成熟的方法，也是现在库实现的方法</p>
+<h3 id="6-ES6中-ExtendsWE"><a href="#6-ES6中-ExtendsWE" class="headerlink" title="6.ES6中 ExtendsWE"></a>6.ES6中 ExtendsWE</h3>
+        </article>
+        <section class="post-near">
+            <ul>
+                
+                    <li>上一篇: 看完啦 (つд⊂)</li>
+                
+                
+                    <li>下一篇: <a href="/2021/07/01/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/">Leetcode刷题笔记</a></li>
+                
+            </ul>
+        </section>
+        
+    
+        <section class="post-author">
+        
+            <figure class="author-avatar">
+                <img src="https://github.com/cadben/images_store/blob/master/img/author.jpg" alt="Cadben" />
+            </figure>
+        
+            <div class="author-info">
+                <h4>Cadben</h4>
+                <p>1596850836@qq.com'</p>
+            </div>
+        </section>
+    
+    </div>
+</main>
+
+    <footer>
+    <div class="buttons">
+        <a class="to-top" href="#"></a>
+    </div>
+    <div class="wrap min">
+        <section class="widget">
+            <div class="row">
+                <div class="col-m-4">
+                    <h3 class="title-recent">最新文章：</h3>
+                    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/07/10/%E9%97%AD%E5%8C%85%E3%80%81new%E3%80%81%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">闭包、new、构造函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/01/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/">Leetcode刷题笔记</a></li></ul>
+                </div>
+                <div class="col-m-4">
+                    <h3 class="title-date">时光机：</h3>
+                    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li></ul>
+                </div>
+                <div class="col-m-4">
+                    <h3 class="title-tags">标签云：</h3>
+                    
+                </div>
+            </div>
+        </section>
+        <section class="sub-footer">
+            <p>© 2022 <a href="/">Cadben</a>. All Rights Reserved. Theme By <a href="https://github.com/Dreamer-Paul/Hingle" target="_blank" rel="nofollow">Hingle</a>.</p>
+        </section>
+    </div>
+</footer>
+
+
+<script src="/static/kico.js"></script>
+<script src="/static/hingle.js"></script>
+
+
+<script>var hingle = new Paul_Hingle({"copyright":true,"night":true});</script>
+
+  </body>
+</html>
